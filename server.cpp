@@ -1,5 +1,5 @@
 #include <iostream>
-#include <winsock.h>
+#include <winsock2.h> // Fixed: Updated to Winsock 2
 #include <ws2tcpip.h>
 
 using namespace std;
@@ -15,29 +15,30 @@ int main() {
 
     char buffer[1024] = {0};
 
-    cout << " === LIGHTWEIGHT LOCAL CONSOLE SERVER ===" << endl;
+    cout << "=== LIGHTWEIGHT LOCAL CONSOLE SERVER ===" << endl;
 
     // 1. Initialize Winsock
-    if (WSAStartup(MAKEWORD(2, 2), &wsasData) != 0) {
-        cout << " [ERROR] Failed to initialize Winsock." << endl;
+    if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0) { // Fixed typo: wsasData -> wsaData
+        cout << "[ERROR] Failed to initialize Winsock." << endl;
         return 1;
     }
+
     // 2. Create a socket
     serverSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     if (serverSocket == INVALID_SOCKET) {
-        cout << " [ERROR] Failed to create socket." << endl;
+        cout << "[ERROR] Failed to create socket." << endl;
         WSACleanup();
         return 1;
     }
 
     // 3. Configure the server address structure
     serverService.sin_family = AF_INET;
-    serverService.sin_addr.s_addr = inet_addr("127.0.0.1");
+    serverService.sin_addr.s_addr = INADDR_ANY; // Listens on all local interfaces
     serverService.sin_port = htons(8080);
 
     // 4. Bind the socket
     if (bind(serverSocket, (SOCKADDR*)&serverService, sizeof(serverService)) == SOCKET_ERROR) {
-        cout << " [ERROR] Failed to bind socket." << endl;
+        cout << "[ERROR] Failed to bind socket." << endl;
         closesocket(serverSocket);
         WSACleanup();
         return 1;
@@ -45,7 +46,7 @@ int main() {
 
     // 5. Listen for incoming connections
     if (listen(serverSocket, SOMAXCONN) == SOCKET_ERROR) {
-        cout << " [ERROR] Listen Failed." << endl;
+        cout << "[ERROR] Listen Failed." << endl;
         closesocket(serverSocket);
         WSACleanup();
         return 1;
@@ -57,7 +58,7 @@ int main() {
     // 6. Accept a client connection
     clientSocket = accept(serverSocket, (SOCKADDR*)&clientService, &clientAddrLen);
     if (clientSocket == INVALID_SOCKET) {
-        cout << " [ERROR] Failed to accept client connection." << endl;
+        cout << "[ERROR] Failed to accept client connection." << endl;
         closesocket(serverSocket);
         WSACleanup();
         return 1;
@@ -69,16 +70,15 @@ int main() {
     int bytesReceived = recv(clientSocket, buffer, sizeof(buffer) - 1, 0);
     if (bytesReceived > 0) {
         buffer[bytesReceived] = '\0';
-        cout << "[RECEIVED] " << buffer << endl;
-
+        cout << "[RECEIVED]\n" << buffer << endl;
     }
 
-    // 8. Send HTTP response back to client
+    // 8. Send HTTP response back to client (Fixed multi-line string quotes)
     string httpResponse = 
-    "HTTP/1.1 200 OK\r\n
-    Content-Type: text/plain\r\n
-    Connection: close\r\n\r\n
-    Hello, from your custom c++ server!";
+        "HTTP/1.1 200 OK\r\n"
+        "Content-Type: text/plain\r\n"
+        "Connection: close\r\n\r\n"
+        "Hello, from your custom C++ server!";
 
     send(clientSocket, httpResponse.c_str(), httpResponse.length(), 0);
     cout << "\n[STATUS] Response sent to client." << endl;
@@ -90,5 +90,4 @@ int main() {
 
     cout << "[STATUS] Server shut down gracefully." << endl;
     return 0;
-}
-
+} 
