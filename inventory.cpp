@@ -60,14 +60,14 @@ int main() {
             } else {
                 cout << "\n[x] Not enough materials! You need 'Wood' and 'Stone'." << endl;
             }
-        }
-    }
+        } 
+
+         else if (choice == 3) {
+         int woodIndex = -1;
 
     cout << "Saving data... See you later!" << endl;
     return 0;
 
-    else if (choice == 3) {
-        int woodIndex
     }
 
 }
