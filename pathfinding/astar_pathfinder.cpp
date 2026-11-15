@@ -22,4 +22,48 @@ void runAStar(int grid [ROWS][COLS], pair<int, int> start, pair<int, int> goal) 
     bool closedList[ROWS][COLS] = {false};
     int gCost[ROWS][COLS];
     pair<int, int> parent[ROWS][COLS];
+    for (int i = 0; i < ROWS; i++) {
+        for (int j = 0; j < COLS; j++) {
+            gCost[i][j] = INT_MAX;
+            parent[i][j] = {-1, -1}; 
+        }
+    }
+
+    // min-heap priority queue for open list
+    priority_queue<PQNode, vector<PQNode>, greater<PQNode>> openList;
+
+    int startX = start.first, startY = start.second;
+    gCost[startX][startY] = 0;
+    int initialF = calculateHeuristic(startX, startY, goal.first, goal.second);
+    openList.push({initialF, {startX, startY}});
+
+    // 4-directional movement (up, down, left, right)
+    int dx[4]= {-1, 1, 0, 0};
+    int dy[4]= {0, 0, -1, 1};
+
+    bool pathFound = false;
+
+    while (!openList.empty()) {
+        PQNode current = openList.top();
+        openList.pop();
+
+        int x = current.second.first;
+        int y = current.second.second;
+
+        if (closedList[x][y]) continue;
+        closedList[x][y] = true;
+
+        // check if goal reached
+        if (x == goal.first && y == goal.second) {
+            pathFound = true;
+            break;
+        }
+
+        // explore neighbors
+        for (int i = 0; i <4; ++i) {
+            int nx = x + dx[i];
+            int ny = y + dy[i];
+
+            // Validate grid bounds
+        }
     }
