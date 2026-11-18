@@ -65,5 +65,32 @@ void runAStar(int grid [ROWS][COLS], pair<int, int> start, pair<int, int> goal) 
             int ny = y + dy[i];
 
             // Validate grid bounds
+            if (nx < 0 || nx >= ROWS || ny < 0 || ny >= COLS) continue;
+            if (grid[nx][ny] == 1 || closedList[nx][ny]) continue;
+
+            int tentativeG = gCost[x][y] + 1; // cost to move to neighbor
+
+            if (tentativeG <gCost[nx][ny]) {
+                gCost[nx][ny] = tentativeG; 
+                int hCost = calculateHeuristic(nx, ny, goal.first, goal.second);
+                int fCost = tentativeG + hCost;
+
+                parent[nx][ny] = {x, y};
+                openList.push({fCost, {nx, ny}});
+            }
+
+            } 
+        }
+
+        // prepare visual grid for output 
+        char visualGrid[ROWS][COLS];
+        for (int i = 0; i < ROWS; ++i) {
+            for (int j = 0; j < COLS; ++j) {
+                visualGrid[i][j] = (grid[i][j] == 1) ? '#' : '.';
+            }
+        }
+
+        if (pathFound) {
+            
         }
     }
