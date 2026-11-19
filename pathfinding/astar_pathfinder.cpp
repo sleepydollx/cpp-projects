@@ -13,7 +13,7 @@ const int COLS = 10;
 // alias for priority queue element: {fCost, {x, y}}
 typedef pair<int, pair<int, int>> PQNode;
 
-// manhattan distance heuristic
+// manhattan distance heuristic whatever whatever
 int calculateHeuristic(int x1, int y1, int x2, int y2) {
     return abs(x1 - x2) + abs(y1 - y2);
 }
@@ -65,5 +65,62 @@ void runAStar(int grid [ROWS][COLS], pair<int, int> start, pair<int, int> goal) 
             int ny = y + dy[i];
 
             // Validate grid bounds
+            if (nx < 0 || nx >= ROWS || ny < 0 || ny >= COLS) continue;
+            if (grid[nx][ny] == 1 || closedList[nx][ny]) continue;
+
+            int tentativeG = gCost[x][y] + 1; // cost to move to neighbor
+
+            if (tentativeG <gCost[nx][ny]) {
+                gCost[nx][ny] = tentativeG; 
+                int hCost = calculateHeuristic(nx, ny, goal.first, goal.second);
+                int fCost = tentativeG + hCost;
+
+                parent[nx][ny] = {x, y};
+                openList.push({fCost, {nx, ny}});
+            }
+
+            } 
         }
-    }
+
+        // prepare visual grid for output 
+        char visualGrid[ROWS][COLS];
+        for (int i = 0; i < ROWS; ++i) {
+            for (int j = 0; j < COLS; ++j) {
+                visualGrid[i][j] = (grid[i][j] == 1) ? '#' : '.';
+            }
+        }
+
+        if (pathFound) {
+            
+        }
+
+if (pathFound) {
+        pair<int, int> curr = parent[goal.first][goal.second];
+        int steps = 1;
+
+        while (curr != start && curr.first != -1) {
+            visualGrid[curr.first][curr.second] = '*';
+            curr = parent[curr.first][curr.second];
+            steps++;
+        }
+
+        visualGrid[start.first][start.second] = 'S';
+        visualGrid[goal.first][goal.second] = 'G'; 
+
+        cout << "== A* PATHFINDING VISUALIZER ==" << endl;
+        cout << "Legend: [S] Start | [G] Goal | [#] Wall | [*] Shortest Path\n" << endl;
+
+        for (int i =0; i < ROWS; ++i){
+            for (int j = 0; j < COLS; ++j) {
+                cout << visualGrid[i][j] << " ";
+            }
+            cout << endl; 
+    } 
+
+    cout << "\n[SUCCESS] Shortest path found in " << steps << " steps!" << endl;
+    } else  
+        cout << "\n[FAILED] No valid path exist between Start and Goal" << endl;
+        {
+    } 
+
+    
