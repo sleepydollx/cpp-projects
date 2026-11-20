@@ -8,7 +8,7 @@
 using namespace std;
 
 const int ROWS = 10;
-const int COLS = 10;
+const int COLS = 15;
 
 // alias for priority queue element: {fCost, {x, y}}
 typedef pair<int, pair<int, int>> PQNode;
@@ -120,7 +120,30 @@ if (pathFound) {
     cout << "\n[SUCCESS] Shortest path found in " << steps << " steps!" << endl;
     } else  
         cout << "\n[FAILED] No valid path exist between Start and Goal" << endl;
-        {
-    } 
+    }  
+
+    int main() {
+
+    // 0 = Walkable tile, 1 = Obstacle / Wall
+    int mapGrid[ROWS][COLS] = {
+        {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+        {1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1},
+        {1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1},
+        {1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1},
+        {1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1},
+        {1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1},
+        {1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1},
+        {1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1},
+        {1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1},
+        {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
+    };
+
+    pair<int, int> startPos = {1, 1};
+    pair<int, int> goalPos = {8, 13};
+
+    runAStar(mapGrid, startPos, goalPos);
+
+    return 0;
+}
 
     
