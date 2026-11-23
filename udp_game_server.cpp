@@ -16,11 +16,11 @@ const int MAP_MAX = 50;
 struct PlayerEndpoint {
     int id;
     string name;
-    sockaddr_in address;
-    int x = 10;
-    int y = 10;
-    int hp = 100;
-    bool isAlive = true;
+    int x = 10; // Default spawn position X
+    int y = 10; // Default spawn position Y
+    int hp = 100; // Default health points
+    bool isAlive = true; // Player alive status
+    sockaddr_in address; // Network address of the player
 };
 
 // Helper function to compare two client network addresses
